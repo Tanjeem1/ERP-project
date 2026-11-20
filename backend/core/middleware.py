@@ -6,12 +6,33 @@ from datetime import timedelta
 from django.conf import settings
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.urls import Resolver404, resolve
 from django.utils import timezone
 from rest_framework.exceptions import APIException
 
 from core.authentication import CachedJWTAuthentication
 from core.models import IdempotencyRecord
 from core.services.cache import jsonable
+
+
+class ApiTrailingSlashMiddleware:
+    """Keep API posts working when a proxy drops Django's trailing slash."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        path = request.path_info
+        if path.startswith("/api/") and not path.endswith("/"):
+            candidate = f"{path}/"
+            try:
+                resolve(candidate)
+            except Resolver404:
+                pass
+            else:
+                request.path_info = candidate
+                request.path = candidate
+        return self.get_response(request)
 
 
 class RequestBodySizeLimitMiddleware:

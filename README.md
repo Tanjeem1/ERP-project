@@ -2,6 +2,14 @@
 
 NexusLedger is an ERP for purchasing, inventory, sales orders, point of sale, returns, expenses, and accounting. The public marketing site is a Next.js app. Signed-in work happens under `/app`. The API is Django and Django REST Framework, with PostgreSQL and Redis.
 
+## Top features
+
+1. **Landed-cost procurement.** Purchase orders move from draft through approval and receipt. Freight, duty, handling, and insurance are allocated onto each received line, including foreign-currency supplier costs.
+2. **FIFO inventory and available-to-promise.** Stock is kept by warehouse, batch, and cost layer. Sales orders and POS reserve units in one transaction so two channels cannot sell the same stock.
+3. **Orders, POS, and returns.** Wholesale orders, counter sales, and returns share the same stock. Shipping consumes the oldest cost layers and can produce the invoice from that shipment.
+4. **Automatic accounting.** Receipts, shipments, and payments post balanced journals for inventory, COGS, receivables, revenue, and tax. Posted journals stay linked to the source document.
+5. **Role-based workspace.** Super Admin, Accountant, Warehouse Manager, and Sales Officer each see the modules their role allows. The sign-in page can open a temporary demo company and switch those roles.
+
 ## Download
 
 ```bash

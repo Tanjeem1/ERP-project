@@ -7,7 +7,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   skipTrailingSlashRedirect: true,
   async rewrites() {
-    return [{ source: "/api/:path*", destination: `${apiOrigin}/api/:path*` }];
+    return [
+      { source: "/api/:path*/", destination: `${apiOrigin}/api/:path*/` },
+      { source: "/api/:path*", destination: `${apiOrigin}/api/:path*/` },
+    ];
   },
 };
 

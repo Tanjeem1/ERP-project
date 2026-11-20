@@ -355,6 +355,11 @@ def test_cache_invalidation_and_trigram_search(client, actor, organization, sku,
     assert "costPriceMinor" not in search.content.decode()
 
 
+def test_api_post_without_trailing_slash_reaches_the_view(client):
+    response = client.post("/api/v1/auth/login", {}, format="json")
+    assert response.status_code == 400, response.content
+
+
 def test_sandbox_seeding_role_switch_and_expired_cleanup(client):
     response = client.post("/api/v1/auth/sandbox/", {}, format="json")
     assert response.status_code == 201, response.content
