@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 214 32% 95%;
+    --secondary-foreground: 222 47% 16%;
+    --muted: 214 32% 95%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 217 91% 96%;
+    --accent-foreground: 221 83% 43%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 158 64% 34%;
+    --success-foreground: 150 60% 98%;
+    --warning: 35 92% 42%;
+    --warning-foreground: 35 90% 98%;
+    --border: 214 32% 91%;
+    --input: 214 25% 86%;
+    --ring: 221 83% 53%;
+    --sidebar: 222 47% 11%;
+    --sidebar-foreground: 215 25% 85%;
+    --sidebar-border: 217 33% 18%;
+    --sidebar-accent: 217 33% 17%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 47% 7%;
+    --foreground: 210 40% 96%;
+    --card: 222 47% 10%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 47% 10%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 217 91% 65%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 217 33% 16%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 50% 20%;
+    --accent-foreground: 217 91% 75%;
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 158 64% 45%;
+    --success-foreground: 150 60% 98%;
+    --warning: 35 92% 55%;
+    --warning-foreground: 35 90% 10%;
+    --border: 217 33% 18%;
+    --input: 217 33% 24%;
+    --ring: 217 91% 65%;
+    --sidebar: 222 47% 8%;
+    --sidebar-foreground: 215 25% 80%;
+    --sidebar-border: 217 33% 16%;
+    --sidebar-accent: 217 33% 15%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type="number"],
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .numeric {
+    @apply font-mono tabular-nums;
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
+  .surface-grid {
+    background-image: linear-gradient(hsl(var(--border) / 0.45) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.45) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .scrollbar-thin {
+    scrollbar-color: hsl(var(--border)) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+
+::selection {
+  background: hsl(var(--primary) / 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  [data-invoice-print],
+  [data-invoice-print] * {
+    visibility: visible;
+  }
+
+  [data-invoice-print] {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .print-hidden {
+    display: none !important;
+  }
+
+  @page {
+    margin: 14mm;
+  }
+}
+
+
+@media print {
+  [data-report-print],
+  [data-report-print] * {
+    visibility: visible;
+  }
+
+  [data-report-print] {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    transform: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
+    color: #0f172a !important;
+  }
+
+  [data-report-print] table {
+    page-break-inside: auto;
+  }
+
+  [data-report-print] tr {
+    page-break-inside: avoid;
+  }
+}

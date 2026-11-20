@@ -1,0 +1,46 @@
+# Frontend
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+
+# Python / Django
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage/
+backend/staticfiles/
+backend/media/
+backend/.test-media/
+celerybeat-schedule
+celerybeat-schedule.*
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+pg_password.txt
+
+# Local databases, caches, and downloaded runtimes
+.tools/
+*.sqlite3
+*.sql
+*.dump
+
+# Logs and OS / editor junk
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

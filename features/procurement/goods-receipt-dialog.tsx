@@ -1,0 +1,21 @@
+"use client";
+
+import { CheckCircle2 } from "lucide-react";
+
+import { JournalEntryContent } from "@/components/erp/record-detail";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { formatMoney } from "@/lib/utils";
+import { useErpStore } from "@/store/useErpStore";
+
+export function GoodsReceiptDialog({ receiptId, open, onOpenChange }: { receiptId: string | null; open: boolean; onOpenChange: (open: boolean) => void }) {
+  const receipt = useErpStore((state) => state.goodsReceipts.find((item) => item.id === receiptId));
+  const journal = useErpStore((state) => state.journalEntries.find((item) => item.id === receipt?.journalEntryId));
+  const products = useErpStore((state) => state.products);
+  const warehouses = useErpStore((state) => state.warehouses);
+  if (!receipt) return null;
+  const warehouse = warehouses.find((item) => item.id === receipt.warehouseId);
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}><DialogContent className="max-w-4xl"><DialogHeader><DialogTitle>{receipt.number} · Goods receipt posted</DialogTitle><DialogDescription>{receipt.purchaseOrderNumber} → {warehouse?.name} · {new Date(receipt.receivedAt).toLocaleString("en-US")}</DialogDescription></DialogHeader><div className="p-5"><div className="grid gap-3 sm:grid-cols-3"><div className="rounded-lg border bg-secondary/30 p-4"><p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Base goods</p><p className="numeric mt-2 text-xl font-semibold">{formatMoney(receipt.totalGoodsBaseMinor)}</p></div><div className="rounded-lg border bg-secondary/30 p-4"><p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Capitalized charges</p><p className="numeric mt-2 text-xl font-semibold text-primary">{formatMoney(receipt.totalLandedCostBaseMinor)}</p></div><div className="rounded-lg border border-slate-200 bg-card p-4 dark:border-white/10"><p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Inventory Asset</p><p className="numeric mt-2 text-xl font-semibold">{formatMoney(receipt.totalInventoryBaseMinor)}</p></div></div><div className="mt-4 flex flex-wrap items-center gap-3"><Badge variant="success"><CheckCircle2 />Stock updated</Badge><Badge variant="secondary">{receipt.allocationMethod.toUpperCase()} allocation</Badge><Badge variant="secondary">{receipt.lines.length} new FIFO layers</Badge></div><div className="scrollbar-thin mt-4 overflow-x-auto rounded-lg border"><table className="w-full min-w-[680px] text-left text-xs"><thead className="bg-secondary/40 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"><tr><th className="px-4 py-3 font-semibold uppercase tracking-wider">SKU</th><th className="px-3 py-3 text-right font-semibold uppercase tracking-wider">Quantity</th><th className="px-3 py-3 text-right font-semibold uppercase tracking-wider">Allocated charges</th><th className="px-3 py-3 text-right font-semibold uppercase tracking-wider">True unit cost</th><th className="px-3 py-3 text-right font-semibold uppercase tracking-wider">FIFO value</th></tr></thead><tbody>{receipt.lines.map((line) => { const product = products.find((item) => item.id === line.productId); return <tr key={line.id} className="border-t"><th scope="row" className="px-4 py-3 font-mono font-medium text-primary">{product?.sku}</th><td className="numeric px-3 py-3 text-right">{line.quantity}</td><td className="numeric px-3 py-3 text-right">{formatMoney(line.allocatedLandedCostMinor)}</td><td className="numeric px-3 py-3 text-right">{formatMoney(line.trueUnitCostMinor, "USD", { minimumFractionDigits: 4, maximumFractionDigits: 4 })}</td><td className="numeric px-3 py-3 text-right">{formatMoney(line.trueTotalCostMinor)}</td></tr>; })}</tbody></table></div></div>{journal ? <div className="border-t"><div className="px-5 pt-5"><h3 className="text-sm font-semibold">Automatically generated accounting</h3><p className="mt-1 text-xs text-muted-foreground">The same atomic transaction posted these balanced ledger lines.</p></div><JournalEntryContent entry={journal} showSourceLink={false} /></div> : null}</DialogContent></Dialog>
+  );
+}
